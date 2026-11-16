@@ -4,7 +4,7 @@ as $$
 begin
 	if not exists(
 	select 1 from don_hang
-	where ma_DH = new.ma_DH and tinh_trang_don_hang is not null and tinh_trang_don_hang = 'da_giao' 
+	where ma_DH = new.ma_DH and tinh_trang_van_chuyen is not null and tinh_trang_van_chuyen = 'da_giao' 
 	)
 	then
         RAISE EXCEPTION 'Chi duoc danh gia khi don hang da giao'
@@ -15,7 +15,7 @@ begin
 end;
 $$ language plpgsql;
 
-create trigger tr_kiem_tra_danh_gia
+create or replace trigger tr_kiem_tra_danh_gia
 before insert or update on danh_gia
 for each row
 execute function f_kiem_tra_danh_gia();
