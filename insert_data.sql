@@ -183,6 +183,7 @@ insert into DV_van_chuyen (ma_DV, ten_DV) values
 ('DV03', 'Viettel Post'),
 ('DV04', 'J&T Express');
 
+
 -- 8. Don_hang
 insert into Don_hang (ma_DH, ma_KH, tinh_trang_xac_nhan, ma_DV, ngay_dat, ngay_nhan, tinh_trang_van_chuyen, ma_GG) values
 ('DH01', 'KH01', 'chua xac nhan', 'DV01', '2026-01-05', '2026-01-10', null,          null),
@@ -377,3 +378,67 @@ insert into Don_thanh_toan (ma_TT, ma_DH, ngay_tao, ngay_TT, tinh_trang, ma_NV) 
 ('TT15', 'DH18', '2026-01-22', '2026-01-22', 'da thanh toan', 'NV03'),
 ('TT16', 'DH19', '2026-01-23', null,          'cho thanh toan', 'NV04'),
 ('TT17', 'DH20', '2026-01-24', null,          'cho thanh toan', 'NV01');
+-- 14. Huy_don_hang
+insert into Don_hang (ma_DH, ma_KH, tinh_trang_xac_nhan, ma_DV, ngay_dat, ngay_nhan, tinh_trang_van_chuyen, ma_GG) values
+-- Nhóm sẽ xác nhận rồi hủy (test hoàn kho)
+('DH43', 'KH01', 'chua xac nhan', 'DV01', '2026-03-01', '2026-03-09', null, null),
+('DH44', 'KH02', 'chua xac nhan', 'DV02', '2026-03-02', '2026-03-10', null, null),
+('DH45', 'KH03', 'chua xac nhan', 'DV03', '2026-03-03', '2026-03-11', null, null),
+('DH46', 'KH04', 'chua xac nhan', 'DV04', '2026-03-04', '2026-03-12', null, null),
+('DH47', 'KH05', 'chua xac nhan', 'DV01', '2026-03-05', '2026-03-13', null, null),
+('DH48', 'KH01', 'chua xac nhan', 'DV02', '2026-03-06', '2026-03-14', null, null),
+-- Nhóm sẽ hủy ngay khi chưa xác nhận (trigger không chạy)
+('DH49', 'KH02', 'chua xac nhan', 'DV03', '2026-03-07', '2026-03-15', null, null),
+('DH50', 'KH03', 'chua xac nhan', 'DV04', '2026-03-08', '2026-03-16', null, null),
+('DH51', 'KH04', 'chua xac nhan', 'DV01', '2026-03-09', '2026-03-17', null, null),
+('DH52', 'KH05', 'chua xac nhan', 'DV02', '2026-03-10', '2026-03-18', null, null),
+-- Nhóm giữ nguyên 'chua xac nhan' (đối chứng)
+('DH53', 'KH01', 'chua xac nhan', 'DV03', '2026-03-11', '2026-03-19', null, null),
+('DH54', 'KH02', 'chua xac nhan', 'DV04', '2026-03-12', '2026-03-20', null, null);
+
+insert into Chi_tiet_don_hang (ma_DH, SKU, so_luong) values
+-- DH43: iPhone 16 256GB + Xiaomi 14T 256GB
+('DH43', 'IP16-256-WHT',   1),
+('DH43', 'XM14T-256-GRY',  1),
+-- DH44: MacBook Air M3 + Dell XPS 13 16GB
+('DH44', 'MBA-M3-16-MID',  1),
+('DH44', 'XPS13-16-SLV',   1),
+-- DH45: TV Samsung 65 + TV LG OLED 55
+('DH45', 'SSTV-65-4K',     1),
+('DH45', 'LGOLED-55',      1),
+-- DH46: Máy giặt Samsung 10kg + Tủ lạnh Samsung 307L
+('DH46', 'SSWM-10KG-SLV',  1),
+('DH46', 'SSFR-307-SLV',   1),
+-- DH47: Điều hòa Daikin 1.5HP
+('DH47', 'DKAC-15HP-WHT',  2),
+-- DH48: HP Pavilion 16GB + Asus Vivobook 16GB
+('DH48', 'HP-PAV14-16-SLV', 1),
+('DH48', 'ASUS-VB15-16-GRY', 1),
+-- DH49: Samsung S25 256GB
+('DH49', 'SS-S25-256-BLK', 1),
+-- DH50: TV Sony 55
+('DH50', 'SONY-X75-55',    1),
+-- DH51: Máy giặt LG 9kg + Tủ lạnh Panasonic 322L
+('DH51', 'LGWM-9KG-WHT',   1),
+('DH51', 'PANFR-322-SLV',  1),
+-- DH52: Xiaomi 14T 512GB
+('DH52', 'XM14T-512-BLK',  2),
+-- DH53: iPhone 16 128GB
+('DH53', 'IP16-128-BLK',   1),
+-- DH54: Điều hòa LG 1HP + Điều hòa Panasonic 1HP
+('DH54', 'LGAC-10HP-WHT',  1),
+('DH54', 'PAAC-10HP-WHT',  1);
+
+update Don_hang
+set tinh_trang_xac_nhan = 'da xac nhan'
+where ma_dh = 'DH54';
+with tien_dh as(
+select dh.ma_dh as ma,sum(bt.gia_ban * ctdh.so_luong * gg.phan_tram / 100) as tien_phai_tra 
+from don_hang dh,chi_tiet_don_hang ctdh ,bien_the bt, giam_gia gg 
+where dh.ma_dh = ctdh.ma_dh and ctdh.sku = bt.sku and dh.ma_gg is not null and dh.ma_gg = gg.ma_gg 
+group by dh.ma_dh
+),
+with tien_theo_ngay as(
+select dtt.ngay_tt , sum(tien_dh.tien_phai_tra)  from tien_dh,don_thanh_toan dtt
+where tien_dh.ma = dtt.ma_dh and dtt.ngay_tt is not null
+group by ngay_tt)

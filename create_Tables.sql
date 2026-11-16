@@ -96,7 +96,7 @@ primary key(ma_DH,SKU)
 create table Danh_gia(
 ma_DG VARCHAR(10),
 ma_DH VARCHAR(10),
-SKU VARCHAR(10),
+SKU VARCHAR(50),
 noi_dung TEXT,
 so_sao FLOAT check(so_sao >= 0 and so_sao <= 5),
 primary key(ma_DG),
@@ -201,3 +201,11 @@ alter table danh_muc
 add constraint fk_2
 foreign key(ma_DM_cha)
 references danh_muc (ma_DM);
+alter table khach_hang
+add column ngay_tao date;
+alter table don_thanh_toan drop constraint fk_2;
+alter table don_thanh_toan drop column ma_NV;
+alter table don_hang add column ma_NV VARCHAR(10);
+alter table don_hang 
+add constraint fk_4
+foreign key(ma_NV) references nguoi_ban(ma_NV);
