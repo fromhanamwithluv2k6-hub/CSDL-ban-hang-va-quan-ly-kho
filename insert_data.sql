@@ -438,7 +438,63 @@ from don_hang dh,chi_tiet_don_hang ctdh ,bien_the bt, giam_gia gg
 where dh.ma_dh = ctdh.ma_dh and ctdh.sku = bt.sku and dh.ma_gg is not null and dh.ma_gg = gg.ma_gg 
 group by dh.ma_dh
 ),
-with tien_theo_ngay as(
-select dtt.ngay_tt , sum(tien_dh.tien_phai_tra)  from tien_dh,don_thanh_toan dtt
-where tien_dh.ma = dtt.ma_dh and dtt.ngay_tt is not null
-group by ngay_tt)
+doanh_thu_theo_ngay as(
+select dtt.ngay_tt as ngay , sum(tien_dh.tien_phai_tra) as doanh_thu_ngay  from tien_dh,don_thanh_toan dtt
+where tien_dh.ma = dtt.ma_dh and dtt.ngay_tt is not null and dtt.ngay_tt between '2026-01-01' and '2026-01-30'
+group by dtt.ngay_tt
+order by ngay_tt),
+doanh_thu_luy_ke as(
+select ngay,doanh_thu_ngay, sum(doanh_thu_ngay) over(order by ngay) as doanh_thu_luy_ke
+from doanh_thu_theo_ngay)
+select lk.ngay, lk.doanh_thu_luy_ke  from doanh_thu_luy_ke as lk
+where lk.doanh_thu_luy_ke >= 100000000
+limit 1;
+update don_hang dh
+set ma_dv = null
+where  dh.tinh_trang_xac_nhan = 'chua xac nhan' or dh.tinh_trang_xac_nhan = 'da huy';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-05' WHERE ma_DH = 'DH01';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-06' WHERE ma_DH = 'DH02';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-07' WHERE ma_DH = 'DH03';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-08' WHERE ma_DH = 'DH04';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-09' WHERE ma_DH = 'DH05';
+
+-- Đợt 2: DH06 - DH10 (Tháng 1)
+UPDATE Don_hang SET ngay_tao_don = '2026-01-10' WHERE ma_DH = 'DH06';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-11' WHERE ma_DH = 'DH07';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-12' WHERE ma_DH = 'DH08';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-13' WHERE ma_DH = 'DH09';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-14' WHERE ma_DH = 'DH10';
+
+-- Đợt 3: DH11 - DH20 (Tháng 1)
+UPDATE Don_hang SET ngay_tao_don = '2026-01-15' WHERE ma_DH = 'DH11';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-16' WHERE ma_DH = 'DH12';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-17' WHERE ma_DH = 'DH13';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-18' WHERE ma_DH = 'DH14';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-19' WHERE ma_DH = 'DH15';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-20' WHERE ma_DH = 'DH16';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-21' WHERE ma_DH = 'DH17';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-22' WHERE ma_DH = 'DH18';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-23' WHERE ma_DH = 'DH19';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-24' WHERE ma_DH = 'DH20';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-25' WHERE ma_DH = 'DH21';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-26' WHERE ma_DH = 'DH22';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-27' WHERE ma_DH = 'DH23';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-28' WHERE ma_DH = 'DH24';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-29' WHERE ma_DH = 'DH25';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-30' WHERE ma_DH = 'DH26';
+UPDATE Don_hang SET ngay_tao_don = '2026-01-31' WHERE ma_DH = 'DH27';
+UPDATE Don_hang SET ngay_tao_don = '2026-02-01' WHERE ma_DH = 'DH28';
+UPDATE Don_hang SET ngay_tao_don = '2026-02-02' WHERE ma_DH = 'DH29';
+UPDATE Don_hang SET ngay_tao_don = '2026-02-03' WHERE ma_DH = 'DH30';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-01' WHERE ma_DH = 'DH43';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-02' WHERE ma_DH = 'DH44';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-03' WHERE ma_DH = 'DH45';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-04' WHERE ma_DH = 'DH46';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-05' WHERE ma_DH = 'DH47';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-06' WHERE ma_DH = 'DH48';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-07' WHERE ma_DH = 'DH49';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-08' WHERE ma_DH = 'DH50';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-09' WHERE ma_DH = 'DH51';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-10' WHERE ma_DH = 'DH52';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-11' WHERE ma_DH = 'DH53';
+UPDATE Don_hang SET ngay_tao_don = '2026-03-12' WHERE ma_DH = 'DH54';

@@ -209,3 +209,5 @@ alter table don_hang add column ma_NV VARCHAR(10);
 alter table don_hang 
 add constraint fk_4
 foreign key(ma_NV) references nguoi_ban(ma_NV);
+alter table don_hang 
+add column ngay_tao_don date;
